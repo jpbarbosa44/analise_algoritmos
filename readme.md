@@ -75,5 +75,5 @@ O programa C imprimirá os resultados diretamente no Terminal (Console). **Você
 -----
 
 ## 📝 Autor
-João Pedro Barbosa e Gabriel H Coetti
+João Pedro Barbosa e Gabriel H Coetti ||
 Projeto desenvolvido para a disciplina de Análise de Algoritmos.
