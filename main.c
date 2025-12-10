@@ -37,13 +37,10 @@ int mochilaForcaBruta(int W, int wt[], int val[], int n) {
 int mochilaDinamica(int W, int wt[], int val[], int n) {
     int i, w;
     
-    // Alocação dinâmica da matriz (Tabela DP) para suportar valores grandes
-    // Estamos criando uma tabela K[n+1][W+1]
     int **K = (int **)malloc((n + 1) * sizeof(int *));
     for (i = 0; i <= n; i++)
         K[i] = (int *)malloc((W + 1) * sizeof(int));
 
-    // Preenchendo a tabela de forma iterativa (Bottom-up)
     for (i = 0; i <= n; i++) {
         for (w = 0; w <= W; w++) {
             if (i == 0 || w == 0)
@@ -55,9 +52,8 @@ int mochilaDinamica(int W, int wt[], int val[], int n) {
         }
     }
 
-    int resultado = K[n][W]; // O resultado está na última célula
+    int resultado = K[n][W];
 
-    // Liberar memória da tabela (boa prática em C)
     for (i = 0; i <= n; i++) free(K[i]);
     free(K);
 
@@ -72,8 +68,6 @@ void executarTeste(int n, int W) {
     int *val = (int *)malloc(n * sizeof(int));
     int *wt = (int *)malloc(n * sizeof(int));
 
-    // Gera dados aleatórios para o teste
-    // Valores entre 10 e 100, Pesos entre 1 e 30
     for(int i=0; i<n; i++) {
         val[i] = (rand() % 90) + 10; 
         wt[i]  = (rand() % 30) + 1;
@@ -83,19 +77,15 @@ void executarTeste(int n, int W) {
     double tempo_gasto;
     int res;
 
-    // --- Teste Força Bruta ---
-    // Apenas rodamos força bruta se N for pequeno (N < 35) para não travar o PC
     if (n <= 32) {
         inicio = clock();
         res = mochilaForcaBruta(W, wt, val, n);
         fim = clock();
         tempo_gasto = ((double)(fim - inicio)) / CLOCKS_PER_SEC;
-        
-        // Formato CSV: Algoritmo, N, Capacidade, Tempo(s), ResultadoMaximo
+
         printf("Bruta,%d,%d,%.6f,%d\n", n, W, tempo_gasto, res);
     }
 
-    // --- Teste Dinâmica ---
     inicio = clock();
     res = mochilaDinamica(W, wt, val, n);
     fim = clock();
@@ -113,19 +103,17 @@ int main() {
 
     // FASE 1: Pequena escala (Comparação Bruta vs Dinâmica)
     // De 10 até 28 itens
-    int capacidadePequena = 50;
-    for (int n = 10; n <= 28; n += 2) {
+    int capacidadePequena = 1000;
+    for (int n = 0; n <= 1000; n++) {
         executarTeste(n, capacidadePequena);
     }
 
     // FASE 2: Grande escala (Apenas Dinâmica)
-    // Vamos usar potências de 2 para chegar até 2^20 (aprox 1 milhão)
-    // Capacidade fixa em 100 para economizar RAM
-    int capacidadeFixa = 100; 
+    // 2^20 (aprox 1 milhão)
+    int capacidadeFixa = 1000; 
     
     // Começa em 2^5 (32) e vai até 2^20 (1.048.576)
-    // Multiplicando n por 2 a cada loop (crescimento exponencial do teste)
-    for (int n = 32; n <= 1048576; n *= 2) {
+    for (int n = 1; n <= 1048576; n *= 2) {
         executarTeste(n, capacidadeFixa);
     }
 
